@@ -1,0 +1,71 @@
+{% extends 'pages/company/base.html' %}
+{% block content %}
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h2 class="m-0"></h2>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{% url 'company_home' %}">Home</a></li>
+          <li class="breadcrumb-item active">Application Details</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 col-md-6 col-sm-3">
+        <!--messages-->
+        {% include 'messages.html' %}
+        <!--messages-->
+        <div class="card shadow">
+          <div class="card-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Application Details</h2>
+                </div>
+                <div class="col-md-6">
+                    <a href="{% url 'application_details' %}" class="btn btn-info float-right">
+                        <i class="right fas fa-angle-left"></i>
+                        Go back
+                    </a>
+                </div>
+            </div>
+            
+          </div>
+          <div class="card-body" style="display: flex;">
+            <div style="flex: 1; padding-right: 10px;">
+              {% if details %}
+                <p style="background-color: #d7e6f5;padding: 20px;"><strong>Business Name:</strong> {{ details.business_name }}</p>
+                <p style="background-color: #d7e6f5;padding: 20px;"><strong>Address:</strong> {{ details.address }}</p>
+                <p style="background-color: #d7e6f5;padding: 20px;"><strong>Phone Number:</strong> {{ details.phone_number }}</p>
+                <p style="background-color: #d7e6f5;padding: 20px;"><strong>Email:</strong> {{ details.email }}</p>
+                <p style="background-color: #d7e6f5;padding: 20px;"><strong>Company Name:</strong> {{ details.company }}</p>
+              {% endif %}
+            </div>
+            <div style="flex: 1; padding-left: 10px;">
+              {% if details %}
+                <p style="background-color: #d7e6f5;padding: 20px;"><strong>Security Service:</strong> {{ details.Service }}</p>
+                <p style="background-color: #d7e6f5;padding: 20px;"><strong>Date Applied:</strong> {{ details.date }}</p>
+                <p style="background-color: #d7e6f5;padding: 20px;"><strong>Country:</strong> {{ details.country }}</p>
+                <p style="background-color: #d7e6f5;padding: 20px;"><strong>Message:</strong> {{ details.message }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!--/. container-fluid -->
+</section>
+<!-- /.content -->
+
+{% endblock %}

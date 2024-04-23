@@ -1,0 +1,164 @@
+{% extends 'pages/client/base.html' %}
+{% block content %}
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h2 class="m-0"></h2>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+          <li class="breadcrumb-item active">Request Service</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12 col-md-6 col-sm-3">
+        <!--messages-->
+        {% include 'messages.html' %}
+        <!--messages-->
+        <div class="card shadow">
+          <div class="card-header">
+            <h2>Security Services Details</h2>
+          </div>
+          <div class="card-body">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#staticBackdrop">
+             Request Service
+            </button>
+    
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel"> Request Service</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form action="" method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
+                       {{form.as_p}}
+                      <div class="row">
+                        <div class="col-md-6">
+                          <button type="button" class="btn btn-secondary form-control" data-dismiss="modal">Close</button>
+                        </div>
+                        <div class="col-md-6">
+                          <button type="submit" class="btn btn-info form-control">Save Details</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--table-->
+            <div class="table-responsive animate__animated animate__fadeIn">
+              <table id="mytable" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>Business Name</th>
+                    <th>Address</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Company</th>
+                    <th>Security service</th>
+                    <th>Document</th>
+                    <th>Date</th>
+                    <th>Country</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Feedback</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for s in service %}
+                  <tr>
+                    <td>{{ s.business_name }}</td>
+                    <td>{{ s.address }}</td>
+                    <td>{{ s.phone_number }}</td>  
+                    <td>{{ s.email }}</td>
+                    <td>{{ s.company }}</td>
+                    <td>{{ s.Service }}</td>
+                    <td>
+                      {% if s.document %}
+                      <a href="{{s.document.url}}">Preview</a>
+                      {% else %}
+                       <p>No document found</p>
+                       {% endif %}
+                    </td>
+                    <td>{{ s.date }}</td>
+                    <td>{{ s.country.capitalize }}</td>
+                    <td>{{ s.message.capitalize }}</td>
+                    <td>
+                      <h5>
+                        {% if s.status == 'pending' %}
+                        <span class="badge bg-warning">{{ s.status }}</span>
+                        {% elif s.status == 'rejected' %}
+                        <span class="badge bg-danger">{{ s.status }}</span>
+                        {% else %}
+                        <span class="badge bg-success">{{ s.status }}</span>
+                        {% endif %}
+
+                    </h5> 
+                    </td>
+                      {% if s.feedback %}
+                    <td>
+                      {{ s.feedback }}
+                    </td>
+                    {% else %}
+                    <td>
+                      <p>No feedback available</p>
+                    </td>
+                    {% endif %}
+                    <td style="display:flex;">
+                      <a href="{% url 'edit_details' s.id %}" class="btn btn-success" style="margin-right: 10px;">Edit</a>
+                      <a href="http://" class="btn btn-secondary" style="margin-right: 10px;">View</a>
+                      <a href="{% url 'delete_service' s.id %}" class="btn btn-danger">Delete</a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!--table-->
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!--/. container-fluid -->
+</section>
+  <!-- /.content -->
+  <script>
+    document.getElementById('company-select').addEventListener('change', function() {
+        var companyId = this.value;
+        fetch(`/get_services/?company_id=${companyId}`)
+        .then(response => response.json())
+        .then(data => {
+            var select = document.getElementById('service-select');
+            select.innerHTML = ''; // Clear previous options
+            data.forEach(service => {
+                var option = document.createElement('option');
+                option.value = service.id;
+                option.text = service.service_name; // Corrected field name
+                select.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching services:', error));
+    });
+    </script>
+
+{% endblock %}

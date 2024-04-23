@@ -1,0 +1,114 @@
+{% extends 'pages/admins/base.html' %}
+{% block content %}
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h2 class="m-0"></h2>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{% url 'admin_home' %}">Home</a></li>
+          <li class="breadcrumb-item active">Applications</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12 col-md-6 col-sm-3">
+        <!--messages-->
+        {% include 'messages.html' %}
+        <!--messages-->
+        <div class="card shadow">
+          <div class="card-header">
+            <h2>Security Service Application Details</h2>
+          </div>
+          <div class="card-body">
+            
+            <!--table-->
+            <div class="table-responsive animate__animated animate__fadeIn">
+              <table id="mytable" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>Business Name</th>
+                    <th>Address</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Company</th>
+                    <th>Security service</th>
+                    <th>Document</th>
+                    <th>Date</th>
+                    <th>Country</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Feedback</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for s in application %}
+                  <tr>
+                    <td>{{ s.business_name }}</td>
+                    <td>{{ s.address }}</td>
+                    <td>{{ s.phone_number }}</td>  
+                    <td>{{ s.email }}</td>
+                    <td>{{ s.company }}</td>
+                    <td>{{ s.Service }}</td>
+                    <td>
+                      {% if s.document %}
+                      <a href="{{s.document.url}}">Preview</a>
+                      {% else %}
+                       <p>No document found</p>
+                       {% endif %}
+                    </td>
+                    <td>{{ s.date }}</td>
+                    <td>{{ s.country.capitalize }}</td>
+                    <td>{{ s.message.capitalize }}</td>
+                    <td>
+                      <h5>
+                        {% if s.status == 'pending' %}
+                        <span class="badge bg-warning">{{ s.status }}</span>
+                        {% elif s.status == 'rejected' %}
+                        <span class="badge bg-danger">{{ s.status }}</span>
+                        {% else %}
+                        <span class="badge bg-success">{{ s.status }}</span>
+                        {% endif %}
+
+                    </h5> 
+                    </td>
+                      {% if s.feedback %}
+                    <td>
+                      {{ s.feedback }}
+                    </td>
+                    {% else %}
+                    <td>
+                      <p class="p text-danger">No feedback available</p>
+                    </td>
+                    {% endif %}
+                    <td style="display:flex;">
+                      <a href="" class="btn btn-success" style="margin-right: 10px;">Edit</a>
+                      <a href="" class="btn btn-secondary" style="margin-right: 10px;">View</a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!--table-->
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!--/. container-fluid -->
+</section>
+<!-- /.content -->
+
+{% endblock %}
